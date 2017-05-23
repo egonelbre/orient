@@ -58,17 +58,8 @@ func main() {
 			fmt.Print(cid, ";")
 		}
 		fmt.Println()
-		for _, run := range comp.Runs {
-			var times []Time
-			switch mode {
-			case "split":
-				times = tt.Splits(run, controls)
-			case "race":
-				times = tt.Race(run, controls)
-			case "delta":
-				times = tt.Delta(run, controls)
-			}
 
+		printTimes := func(run *Run, times []Time) {
 			fmt.Print(run.FirstName, " ", run.LastName, ";")
 			fmt.Print(run.Course, ";")
 			for _, t := range times {
@@ -78,6 +69,24 @@ func main() {
 				fmt.Print(";")
 			}
 			fmt.Println()
+		}
+
+		switch mode {
+		case "split":
+			printTimes(&Run{FirstName: "BEST"}, tt.BestSplit(controls))
+		case "race":
+		case "delta":
+			printTimes(&Run{FirstName: "BEST"}, tt.BestDelta(controls))
+		}
+		for _, run := range comp.Runs {
+			switch mode {
+			case "split":
+				printTimes(run, tt.Splits(run, controls))
+			case "race":
+				printTimes(run, tt.Race(run, controls))
+			case "delta":
+				printTimes(run, tt.Delta(run, controls))
+			}
 		}
 	default:
 		fmt.Fprintf(os.Stderr, "unknown mode %v\n", mode)

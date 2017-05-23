@@ -102,6 +102,28 @@ func (tt *TimeTable) Splits(run *Run, controls []string) []Time {
 	return times
 }
 
+func (tt *TimeTable) BestSplit(controls []string) []Time {
+	times := []Time{}
+
+	time := Time(0)
+	prev := ""
+	for _, cid := range controls {
+		c, ok := tt.Control[cid]
+		if prev == "" || !ok {
+			prev = cid
+			times = append(times, time)
+			continue
+		}
+
+		time += c.SplitFrom[prev][0]
+		times = append(times, time)
+
+		prev = cid
+	}
+
+	return times
+}
+
 func (tt *TimeTable) Race(run *Run, controls []string) []Time {
 	times := []Time{}
 
@@ -129,7 +151,7 @@ func (tt *TimeTable) Delta(run *Run, controls []string) []Time {
 	prev := ""
 	for _, cid := range controls {
 		c, ok := tt.Control[cid]
-		if prev == "" {
+		if prev == "" || !ok {
 			prev = cid
 			times = append(times, InvalidTime)
 			continue
@@ -144,6 +166,25 @@ func (tt *TimeTable) Delta(run *Run, controls []string) []Time {
 
 		target := AverageTimeN(c.SplitFrom[prev], 6)
 		times = append(times, target-split)
+		prev = cid
+	}
+
+	return times
+}
+
+func (tt *TimeTable) BestDelta(controls []string) []Time {
+	times := []Time{}
+
+	prev := ""
+	for _, cid := range controls {
+		c, ok := tt.Control[cid]
+		if prev == "" || !ok {
+			prev = cid
+			times = append(times, InvalidTime)
+			continue
+		}
+
+		times = append(times, c.SplitFrom[prev][0])
 		prev = cid
 	}
 
