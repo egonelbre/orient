@@ -9,9 +9,10 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		fmt.Fprintf(os.Stderr, "USAGE:")
-		fmt.Fprintf(os.Stderr, "\torient splits <data.csv>")
-		fmt.Fprintf(os.Stderr, "\torient relative <data.csv>")
+		fmt.Fprintf(os.Stderr, "USAGE:\n")
+		fmt.Fprintf(os.Stderr, "\torient split data.csv\n")
+		fmt.Fprintf(os.Stderr, "\torient race  data.csv\n")
+		fmt.Fprintf(os.Stderr, "\torient delta data.csv\n")
 		os.Exit(1)
 	}
 
