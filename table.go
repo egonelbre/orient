@@ -102,7 +102,7 @@ func (tt *TimeTable) Splits(run *Run, controls []string) []Time {
 	return times
 }
 
-func (tt *TimeTable) BestSplit(controls []string) []Time {
+func (tt *TimeTable) BestSplit(controls []string, n int) []Time {
 	times := []Time{}
 
 	time := Time(0)
@@ -115,7 +115,7 @@ func (tt *TimeTable) BestSplit(controls []string) []Time {
 			continue
 		}
 
-		time += c.SplitFrom[prev][0]
+		time += c.SplitFrom[prev][n]
 		times = append(times, time)
 
 		prev = cid
@@ -172,7 +172,7 @@ func (tt *TimeTable) Delta(run *Run, controls []string) []Time {
 	return times
 }
 
-func (tt *TimeTable) BestDelta(controls []string) []Time {
+func (tt *TimeTable) BestDelta(controls []string, n int) []Time {
 	times := []Time{}
 
 	prev := ""
@@ -184,7 +184,7 @@ func (tt *TimeTable) BestDelta(controls []string) []Time {
 			continue
 		}
 
-		times = append(times, c.SplitFrom[prev][0])
+		times = append(times, c.SplitFrom[prev][n])
 		prev = cid
 	}
 

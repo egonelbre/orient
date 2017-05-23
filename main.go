@@ -60,7 +60,11 @@ func main() {
 		fmt.Println()
 
 		printTimes := func(run *Run, times []Time) {
-			fmt.Print(run.FirstName, " ", run.LastName, ";")
+			fmt.Print(run.FirstName)
+			if run.LastName != "" {
+				fmt.Print(" ", run.LastName)
+			}
+			fmt.Print(";")
 			fmt.Print(run.Course, ";")
 			for _, t := range times {
 				if !t.IsInvalid() {
@@ -73,10 +77,16 @@ func main() {
 
 		switch mode {
 		case "split":
-			printTimes(&Run{FirstName: "BEST"}, tt.BestSplit(controls))
+			for i := 0; i < 5; i++ {
+				s := fmt.Sprintf("BEST-%d", i+1)
+				printTimes(&Run{FirstName: s}, tt.BestSplit(controls, i))
+			}
 		case "race":
 		case "delta":
-			printTimes(&Run{FirstName: "BEST"}, tt.BestDelta(controls))
+			for i := 0; i < 5; i++ {
+				s := fmt.Sprintf("BEST-%d", i+1)
+				printTimes(&Run{FirstName: s}, tt.BestDelta(controls, i))
+			}
 		}
 		for _, run := range comp.Runs {
 			switch mode {
